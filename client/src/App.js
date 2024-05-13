@@ -1,15 +1,16 @@
-import Users from './components/Users.jsx'
-import ChatModule from './components/ChatModule.jsx';
-import Sidebar from './components/Sidebar.jsx';
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import Home from './components/Home.jsx'
+import Login from './components/Login.jsx';
 
 function App() {
   return (
     <>
-      <div className='flex'>
-        <Sidebar />
-        <Users />
-        <ChatModule />
-      </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' Component={Login}/>
+        <Route path='/Home' Component={Home}/>
+      </Routes>
+    </BrowserRouter>
     </>
   );
 }

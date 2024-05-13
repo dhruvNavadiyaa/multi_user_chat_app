@@ -3,7 +3,7 @@ import '../css/Utility.css'
 
 export default function ChatModule() {
     return (
-        <div className='p-10  container h-screen bg-neutral-800'  >
+        // <div className='p-10  container h-screen bg-neutral-800'  >
 
             <div className="flex flex-col bg-neutral-900 h-full      rounded-2xl text-white">
 
@@ -42,6 +42,6 @@ export default function ChatModule() {
 
             </div>
 
-        </div>
+        // </div>
     )
 }
