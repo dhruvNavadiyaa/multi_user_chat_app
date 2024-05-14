@@ -21,7 +21,7 @@ app.get('/',(req,res)=>{
 let users=[]
 io.on("connection",(socket)=>{
 
-    console.log("Id", socket.id)
+    console.log("New User Joined: ", socket.id)
 
     socket.emit("current-users", users);
 
@@ -30,9 +30,16 @@ io.on("connection",(socket)=>{
         socket.broadcast.emit("new-user-joined", { id: userData.id, name: userData.name });
     })
 
-    socket.on("disconnect",userData=>{
-        users = users.filter(item => item.id !== userData.id); // Remove the disconnected user from the users array
-        io.emit("user-disconnected", socket.id);
+    socket.on("message",data=>{
+        io.to(data.chatUserId).emit("receive-msg",data)
+    })
+
+    socket.on("disconnect",()=>{
+        users = users.filter(item => item.id !== socket.id); // Remove the disconnected user from the users array
+        // io.emit("user-disconnected", socket.id);
+        console.log("User disconnected :",socket.id)
+        console.log(users)
+        io.emit("current-users", users);
     })
 
 })
