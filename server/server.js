@@ -31,7 +31,7 @@ io.on("connection",(socket)=>{
     })
 
     socket.on("message",data=>{
-        io.to(data.chatUserId).emit("receive-msg",data)
+        io.to(data.receiverId).emit("receive-msg",data)
     })
 
     socket.on("disconnect",()=>{

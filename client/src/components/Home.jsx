@@ -10,17 +10,17 @@ export default function Home() {
     const [userData, setUserData] = useState({ name: null, id: null });
     const [allUsers, setAllUsers] = useState([])
     const [currentChatUser, setCurrentChatUser] = useState()
-    const [message, setMessage] = useState()
+    const [message, setMessage] = useState("")
 
     const appendLeft = (data) => {
-        const messageContainer = document.getElementById(`_${data.chatUserId}`)
+        const messageContainer = document.getElementById(`_${data.senderId}`)
         const messageElement = document.createElement('div')
         messageElement.classList.add('my-1', 'inline', 'flex', 'items-center', 'float-start', 'clear-both')
-        messageElement.innerHTML = `<p class=" underline text-xs">.</p>&nbsp;&nbsp;<p class="px-4 py-2 text-slate-300 rounded-lg bg-slate-600 ">${data.message}</p>`
+        messageElement.innerHTML = `<p class=" underline text-xs">.</p>&nbsp;&nbsp;<p class="px-4 py-2 text-slate-300 rounded-lg bg-slate-600 ">${data?.message}</p>`
         messageContainer?.appendChild(messageElement)
     }
     const appendRight = (data) => {
-        const messageContainer = document.getElementById(`_${data.chatUserId}`)
+        const messageContainer = document.getElementById(`_${data.receiverId}`)
         const messageElement = document.createElement('div')
         messageElement.classList.add('my-1', 'inline', 'flex', 'items-center', 'float-end', 'clear-both')
         messageElement.innerHTML = ` <p class="px-4 py-2 text-slate-300 rounded-lg bg-slate-600">${data.message}</p>&nbsp;&nbsp<p class=" underline text-xs">.</p>`
@@ -59,17 +59,22 @@ export default function Home() {
 
     const sendMessage = (e) => {
         e.preventDefault()
-        let chatUserId = currentChatUser.id
-        // console.log(chatUserId, message)
-        socket.emit("message", { chatUserId, message })
-        appendRight({ chatUserId, message })
+        let receiverId = currentChatUser.id
+        let senderId = userData.id
+        console.log(receiverId, message)
+        socket.emit("message", { receiverId, message, senderId })
+        appendRight({ receiverId, message })
         setMessage("")
     }
 
     useEffect(() => {
         connection()
         socket.on("receive-msg", data => {
-            console.log(data)
+            // let d = {
+            //     chatUserId: userData.id,
+            //     message: data.message
+            // }
+            // console.log(data)
             appendLeft(data)
         })
         return () => {
@@ -125,7 +130,7 @@ export default function Home() {
                 allUsers.map((item) => {
                     // console.log(item.id)
                     return (
-                        <div className='container h-full'  hidden={item.id !== currentChatUser?.id}>
+                        <div className='container h-full' hidden={item.id !== currentChatUser?.id} key={item.id}>
 
                             <div className="flex flex-col bg-neutral-900 h-full   rounded-2xl text-white">
 
